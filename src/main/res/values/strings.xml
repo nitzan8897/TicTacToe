@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="title_activity_tic_tac_toe_app">TicTacToeApp</string>
+    <string name="title_activity_tic_tac_toe_colors.kt">TicTacToeColors.kt</string>
+</resources>
