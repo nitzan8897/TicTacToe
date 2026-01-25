@@ -62,8 +62,8 @@ fun GameBoardScreen(
                 Row {
                     for (col in 0..2) {
                         GameCell(
-                            symbol = state.board[row][col], // שולחים לתא מה לצייר
-                            onClick = { onCellClick(row, col) } // שולחים לתא את הלחיצה
+                            symbol = state.board[row][col], // Send the cell the symbol to draw.
+                            onClick = { onCellClick(row, col) } // Apply the cell the click fun.
                         )
                     }
                 }

@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-enum class Player { X, O, NONE }
-
 data class GameState(
     val board: List<List<Player>>,
     val currentPlayer: Player,
@@ -41,10 +39,6 @@ class GameViewModel : ViewModel() {
         )
     }
 
-    fun resetGame() {
-        _gameState.value = createInitialState()
-    }
-
     private fun createInitialState(): GameState = GameState(
         board = List(3) { List(3) { Player.NONE } },
         currentPlayer = Player.X,
@@ -53,18 +47,39 @@ class GameViewModel : ViewModel() {
         isGameOver = false
     )
 
-    private fun checkVictory(board: List<List<Player>>): Player? {
+    private fun checkRowWinner(board: List<List<Player>>): Player? {
         for (i in 0..2) {
-            if (board[i][0] != Player.NONE && board[i][0] == board[i][1] && board[i][1] == board[i][2]) return board[i][0]
+            if (board[i][0] != Player.NONE && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+                return board[i][0]
+            }
         }
-
-        for (i in 0..2) {
-            if (board[0][i] != Player.NONE && board[0][i] == board[1][i] && board[1][i] == board[2][i]) return board[0][i]
-        }
-
-        if (board[0][0] != Player.NONE && board[0][0] == board[1][1] && board[1][1] == board[2][2]) return board[0][0]
-        if (board[0][2] != Player.NONE && board[0][2] == board[1][1] && board[1][1] == board[2][0]) return board[0][2]
-
         return null
+    }
+
+    private fun checkColumnWinner(board: List<List<Player>>): Player? {
+        for (i in 0..2) {
+            if (board[0][i] != Player.NONE && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+                return board[0][i]
+            }
+        }
+        return null
+    }
+
+    private fun checkDiagonalWinner(board: List<List<Player>>): Player? {
+        if (board[0][0] != Player.NONE && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+            return board[0][0]
+        }
+        if (board[0][2] != Player.NONE && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+            return board[0][2]
+        }
+        return null
+    }
+
+        private fun checkVictory(board: List<List<Player>>): Player? {
+        return checkRowWinner(board) ?: checkColumnWinner(board) ?: checkDiagonalWinner(board)
+    }
+
+        fun resetGame() {
+        _gameState.value = createInitialState()
     }
 }
